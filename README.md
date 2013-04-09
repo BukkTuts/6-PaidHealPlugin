@@ -1,2 +1,2 @@
-6-PaidHealPlugin
+PaidHealPlugin
 ================
