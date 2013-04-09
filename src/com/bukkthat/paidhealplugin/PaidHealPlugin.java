@@ -89,7 +89,9 @@ public class PaidHealPlugin extends JavaPlugin {
                 // Permissions check, does the player have the heal.self node?
                 if(player.hasPermission("heal.self")) {
                 	// Check if they have enough money to use the command
-                	if(playerBalance >= healPrice) {
+                	if(economy.has(player.getName(), healPrice)) {
+                		// Take the money from the player
+                		economy.withdrawPlayer(player.getName(), healPrice);
                 		// Set their health back to the maximum
                 		player.setHealth(player.getMaxHealth());
                 		// Feed them to 20/20
@@ -113,8 +115,24 @@ public class PaidHealPlugin extends JavaPlugin {
         } else if(args.length == 1) {
         	// Permissions check, does the player have the heal.others node?
         	if(sender.hasPermission("heal.others")) {
-        		// Check if our sender is a player and check if they have enough money
-        		if(sender instanceof Player && economy.getBalance(((Player) sender).getName()) >= healPrice) {
+        		// Check if the sender is a player
+        		if(sender instanceof Player){
+        			// If it is cast it and put it into a new player variable
+        			Player player = (Player) sender;
+        			// Check if the player has enough money
+        			if(economy.has(player.getName(), healPrice)) {
+        				// Take the money from them
+        				economy.withdrawPlayer(player.getName(), healPrice);
+        			} else {
+        				// If they don't have enough money, tell them
+        				player.sendMessage(ChatColor.RED + "You do not have enough money to use this command!");
+        				player.sendMessage(ChatColor.GREEN + "You require " + ChatColor.GOLD + economy.format(healPrice - economy.getBalance(player.getName())));
+        				// Return here so we don't go on and heal the player if nothing was paid.
+        				// We return with true so the usage text from the plugin.yml doesn't get sent the player.
+        				return true;
+        			}
+        		}
+        		
         			// Get the player using the username supplied in the first argument
         			Player target = Bukkit.getPlayer(args[0]);
         			// Make sure the player is online.
@@ -129,11 +147,7 @@ public class PaidHealPlugin extends JavaPlugin {
         				sender.sendMessage(ChatColor.GREEN + target.getName() + " was healed and fed!");
         				target.sendMessage(ChatColor.GREEN + "You were healed and fed!");
         			}
-        		}else{
-        			// If they don't have enough money, tell them
-        			sender.sendMessage(ChatColor.RED + "You do not have enough money to use this command!");
-            		sender.sendMessage(ChatColor.GREEN + "You require " + ChatColor.GOLD + economy.format(healPrice - economy.getBalance(((Player) sender).getName())));
-        		}
+        		
         	} else {
         		// If they don't have the required permission, tell them.
         		sender.sendMessage(ChatColor.RED + "You do not have permission to do that!");

@@ -1,6 +1,7 @@
 main: com.bukkthat.paidhealplugin.PaidHealPlugin
 version: 1.0.0
 name: PaidHealPlugin
+authors: [Tzeentchful, gomeow]
 depend: [Vault]
 
 commands:
