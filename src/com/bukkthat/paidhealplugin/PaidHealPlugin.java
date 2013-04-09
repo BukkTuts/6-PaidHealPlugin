@@ -18,6 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * any EventHandlers within it.
  * 
  * @author gomeow
+ * @author Tzeentchful
  */
 public class PaidHealPlugin extends JavaPlugin {
 	
