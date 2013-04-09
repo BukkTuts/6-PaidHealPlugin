@@ -1,0 +1,9 @@
+main: com.bukkthat.paidhealplugin.PaidHealPlugin
+version: 1.0.0
+name: PaidHealPlugin
+depend: [Vault]
+
+commands:
+  heal:
+    description: Heals yourself or another player.
+    usage: /<command> [player to heal]
